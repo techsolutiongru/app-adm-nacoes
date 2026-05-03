@@ -19,7 +19,12 @@ export default function DashboardPage() {
   const [ordensRecentes, setOrdensRecentes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => { loadDashboard() }, [])
+  useEffect(() => { 
+    loadDashboard() 
+    
+    // MVP: Disparar check de manutenção no load do dashboard
+    fetch('/api/cron/maintenance-check').catch(e => console.error('Cron ping failed:', e))
+  }, [])
 
   async function loadDashboard() {
     try {

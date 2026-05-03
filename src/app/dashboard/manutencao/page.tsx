@@ -69,7 +69,12 @@ export default function ManutencaoPage() {
   }
 
   async function handleSave() {
-    const payload = { ...form, data_solicitacao: new Date(form.data_solicitacao).toISOString(), categoria_id: form.categoria_id || null, prazo_dias: form.prazo_dias || 7 }
+    const payload: any = { ...form, categoria_id: form.categoria_id || null, prazo_dias: form.prazo_dias || 7 }
+    if (form.data_solicitacao) {
+      payload.data_solicitacao = new Date(form.data_solicitacao).toISOString()
+    } else {
+      payload.data_solicitacao = new Date().toISOString()
+    }
     LOG('payload', payload)
     if (editing) {
       const { data, error } = await supabase.from('maintenance_orders').update(payload).eq('id', editing.id).select()
