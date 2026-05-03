@@ -4,7 +4,8 @@ import { cookies } from 'next/headers'
 import { Resend } from 'resend'
 import { format, parseISO, differenceInHours } from 'date-fns'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Inicializa condicionalmente para evitar erro de build na Vercel
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 function createClient() {
   return createServerClient(
@@ -88,7 +89,7 @@ export async function GET() {
         </div>
       `
 
-      if (process.env.RESEND_API_KEY) {
+      if (resend) {
         try {
           await resend.emails.send({
             from: 'Sistema ADM Nações <onboarding@resend.dev>', // Usando domínio de dev da resend temporariamente
